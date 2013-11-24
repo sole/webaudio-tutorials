@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf8">
+		<title>event dispatching</title>
+	</head>
+	<body>
+
+		<h1>a comparison of different ways to dispatch Web Audio events</h1>
+		
+		<div class="counter">event index<span>1</span></div>
+
+		<label><input type="radio" name="system" value="setInterval" /> setInterval</label><br />
+		<label><input type="radio" name="system" value="setTimeout" /> setTimeout</label><br />
+		<label><input type="radio" name="system" value="node" /> audio node</label>
+
+		<script src="../libs/AudioContextMonkeyPatch.js"></script>
+		<script src="main.js"></script>
+	</body>
+</html>
