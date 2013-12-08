@@ -20,6 +20,10 @@ window.onload = function() {
 
 	}
 
+    events.forEach(function(e) {
+        console.log(e.timestamp, e.frequency);
+    });
+
 	// setInterval
 	// setTimeout
 	// ScriptNode/analyser
@@ -27,13 +31,15 @@ window.onload = function() {
 	var updateInterval = setInterval(updateWithInterval, 20);
 
 	var startTime = Date.now();
-	var loopTime = 0;
+	//var loopTime = 0;
+	var loopTime = Date.now();
 
 	function updateWithInterval() {
 		var currentEvent = events[currentEventIndex];
-		var time = Date.now() - startTime - loopTime;
+		var time = Date.now(); //  - startTime - loopTime;
+        var currentTimestamp = currentEvent.timestamp + loopTime;
 
-		if(time >= currentEvent.timestamp) {
+		if(time >= currentTimestamp) {
 			// do it!
 			currentEventIndex++;
 			
