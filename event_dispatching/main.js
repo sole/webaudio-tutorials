@@ -4,15 +4,17 @@ window.onload = function() {
 	var oscillator = audioContext.createOscillator();
 
 	var events = [];
-	var numEvents = 10;
+	var numEvents = 24;
+    var sequenceLength = 2000; // ms
+    var eventLength = sequenceLength / numEvents;
 	var currentEventIndex = 0;
 	var spanIndex = document.querySelector('.counter span');
 
 	for(var i = 0; i < numEvents; i++) {
 
-		var note = i*3 + 48;
+		var note = i*1 + 60;
 		var ev = {
-			timestamp: i * (1000.0 / numEvents),
+			timestamp: i * eventLength,
 			frequency: 440.0 * Math.pow(2, (note - 69.0) / 12.0)
 		};
 
@@ -43,7 +45,7 @@ window.onload = function() {
 		var time = Date.now(); //  - startTime - loopTime;
         var currentTimestamp = currentEvent.timestamp + loopTime;
 
-        oscillator.frequency.value = currentEvent.frequency;
+        oscillator.frequency.setValueAtTime(currentEvent.frequency, audioContext.currentTime);
 
         spanIndex.innerHTML = currentEventIndex + ' ' + time;
 		
