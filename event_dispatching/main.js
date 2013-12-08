@@ -10,7 +10,7 @@ window.onload = function() {
 
 	for(var i = 0; i < numEvents; i++) {
 
-		var note = i + 12;
+		var note = i*3 + 48;
 		var ev = {
 			timestamp: i * (1000.0 / numEvents),
 			frequency: 440.0 * Math.pow(2, (note - 69.0) / 12.0)
@@ -23,6 +23,10 @@ window.onload = function() {
     events.forEach(function(e) {
         console.log(e.timestamp, e.frequency);
     });
+
+    oscillator.type = 'triangle';
+    oscillator.connect(audioContext.destination);
+    oscillator.start(0);
 
 	// setInterval
 	// setTimeout
@@ -39,7 +43,11 @@ window.onload = function() {
 		var time = Date.now(); //  - startTime - loopTime;
         var currentTimestamp = currentEvent.timestamp + loopTime;
 
-		if(time >= currentTimestamp) {
+        oscillator.frequency.value = currentEvent.frequency;
+
+        spanIndex.innerHTML = currentEventIndex + ' ' + time;
+		
+        if(time >= currentTimestamp) {
 			// do it!
 			currentEventIndex++;
 			
@@ -47,7 +55,7 @@ window.onload = function() {
 				loopTime = Date.now();
 				currentEventIndex = 0;
 			}
-			spanIndex.innerHTML = currentEventIndex;
+
 		}
 	}
 
