@@ -15,6 +15,8 @@
 	window.addEventListener('dragenter', cancel);
 	window.addEventListener('drop', drop);
 
+	var filePicker = document.getElementById('filePicker');
+	filePicker.addEventListener('change', pick);
 
 	// ---
 	
@@ -29,7 +31,21 @@
 		evt.preventDefault(); // so that the browser doesn't try to open the file with Quicktime or whatever
 		
 		var files = evt.dataTransfer.files;
-		console.log('files=', files.length);
+		loadFromFiles(files);
+	
+	}
+
+
+	function pick(evt) {
+		
+		var picker = evt.target;
+		var files = picker.files;
+		loadFromFiles(files);
+
+	}
+
+
+	function loadFromFiles(files) {
 		if(files.length > 0) {
 
 			var file = files[0];
@@ -39,7 +55,6 @@
 
 			reader.readAsArrayBuffer(file);
 		}
-
 	}
 
 
