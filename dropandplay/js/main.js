@@ -46,6 +46,7 @@
 
 
 	function loadFromFiles(files) {
+
 		if(files.length > 0) {
 
 			var file = files[0];
@@ -55,10 +56,12 @@
 
 			reader.readAsArrayBuffer(file);
 		}
+
 	}
 
 
 	function onFileReaderError(evt) {
+
 		var error = evt.target.error;
 
 		switch(error.code) {
@@ -74,18 +77,20 @@
 			default:
 				console.log('generic error?');
 		}
+	
 	}
 
 
 	function onFileLoaded(evt) {
-		console.log(evt);
+
 		var buffer = evt.target.result;
 		loadSample(buffer);
+
 	}
 
 
 	function loadSample(arrayBuffer) {
-		console.log('loadSample', arrayBuffer);
+
 		audioContext.decodeAudioData(arrayBuffer, function success(buffer) {
 			if(buffer) {
 				useSample(buffer);
@@ -93,10 +98,12 @@
 		}, function fail(evt) {
 			console.error('Error loading sample', evt);
 		});
+
 	}
 
 
 	function useSample(buffer) {
+
 		if(bufferSource) {
 			bufferSource.disconnect(audioContext.destination);
 		}
@@ -107,11 +114,12 @@
 		bufferSource.start(0);
 
 		drawSample(buffer);
+
 	}
 
 
 	function drawSample(buffer) {
-		console.log(buffer);
+
 		var width = canvas.width;
 		var height = canvas.height;
 		var halfHeight = height * 0.5;
@@ -128,7 +136,6 @@
 
 		var sliceWidth = width * 1.0 / bufferLength;
 		var x = 0;
-
 
 		for(var i = 0; i < bufferLength; i++) {
 
@@ -147,6 +154,7 @@
 		canvasContext.lineTo(width, halfHeight);
 
 		canvasContext.stroke();
+
 	}
 	
 
