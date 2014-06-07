@@ -5,18 +5,23 @@
 
 	var canvas = document.querySelector('canvas');
 
+	// audio setup
+	var audioContext = new AudioContext();
+    var bufferSource;
+
 	// events
 	window.addEventListener('dragover', cancel);
 	window.addEventListener('dragenter', cancel);
 	window.addEventListener('drop', drop);
 
 
+	// ---
+	
 	function cancel(evt) {
-		if(evt.preventDefault) {
-			evt.preventDefault();
-		}
+		evt.preventDefault();
 		return false;
 	}
+
 
 	function drop(evt) {
 
@@ -25,6 +30,7 @@
 		var files = evt.dataTransfer.files;
 		console.log('files=', files.length);
 		if(files.length > 0) {
+
 			var file = files[0];
 			var reader = new FileReader();
 			reader.addEventListener('error', onFileReaderError);
@@ -62,11 +68,27 @@
 	}
 
 
-	function loadSample(buffer) {
-		console.log('loadSample', buffer);
+	function loadSample(arrayBuffer) {
+		console.log('loadSample', arrayBuffer);
+		audioContext.decodeAudioData(arrayBuffer, function success(buffer) {
+			if(buffer) {
+				playSample(buffer);
+			}
+		}, function fail(evt) {
+			console.error('Error loading sample', evt);
+		});
 	}
 
-
+	function playSample(buffer) {
+		if(bufferSource) {
+			bufferSource.disconnect(audioContext.destination);
+		}
+		bufferSource = audioContext.createBufferSource();
+		bufferSource.connect(audioContext.destination);
+		bufferSource.loop = true;
+		bufferSource.buffer = buffer;
+		bufferSource.start(0);
+	}
 	
 
 }).call(this);
