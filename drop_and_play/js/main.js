@@ -3,8 +3,8 @@
 	h1.textContent = document.title;
 	
 
-	var canvas = document.querySelector('canvas');
-	var canvasContext = canvas.getContext('2d');
+	var waveCanvas = document.getElementById('waveCanvas');
+	var waveCanvasContext = waveCanvas.getContext('2d');
 
 	// audio setup
 	var audioContext = new AudioContext();
@@ -113,7 +113,7 @@
 		bufferSource.buffer = buffer;
 		bufferSource.start(0);
 
-		drawSample(canvas, buffer);
+		drawSample(waveCanvas, buffer);
 
 	}
 
