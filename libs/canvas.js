@@ -1,9 +1,8 @@
-function drawSample(canvas, buffer) {
+function drawSample(canvas, bufferData) {
 
 	var width = canvas.width;
 	var height = canvas.height;
 	var halfHeight = height * 0.5;
-	var bufferData = buffer.getChannelData(0);
 	var bufferLength = bufferData.length;
 	var canvasContext = canvas.getContext('2d');
 
@@ -21,12 +20,16 @@ function drawSample(canvas, buffer) {
 	for(var i = 0; i < bufferLength; i++) {
 
 		var v = bufferData[i];
-		var y = (v + 1) * halfHeight;
+		var y = ((v + 1) * halfHeight) ;
+
+		// make the line be in the middle of the pixel for max sharpness
+		var xr = Math.round(x) + 0.5; 
+		y = Math.round(y) + 0.5;
 
 		if(i === 0) {
-			canvasContext.moveTo(x, y);
+			canvasContext.moveTo(xr, y);
 		} else {
-			canvasContext.lineTo(x, y);
+			canvasContext.lineTo(xr, y);
 		}
 
 		x += sliceWidth;
