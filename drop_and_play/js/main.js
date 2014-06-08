@@ -13,9 +13,17 @@
 	// audio setup
 	var audioContext = new AudioContext();
 	var finalGain = audioContext.createGain();
-    var bufferSource;
+	var analyser = audioContext.createAnalyser();
+	var analyserData;
+	var osciData;
+	var bufferSource;
 
-	finalGain.connect(audioContext.destination);
+	analyser.fftSize = 2048;
+	analyserData = new Uint8Array(analyser.frequencyBinCount);
+	osciData = new Float32Array(analyser.frequencyBinCount);
+
+	finalGain.connect(analyser);
+	analyser.connect(audioContext.destination);
 
 	// events
 	window.addEventListener('dragover', cancel);
@@ -24,6 +32,8 @@
 
 	var filePicker = document.getElementById('filePicker');
 	filePicker.addEventListener('change', pick);
+
+	animate();
 
 	// ---
 	
@@ -120,7 +130,24 @@
 		bufferSource.buffer = buffer;
 		bufferSource.start(0);
 
-		drawSample(waveCanvas, buffer);
+		drawSample(waveCanvas, buffer.getChannelData(0));
+
+	}
+
+
+	function animate() {
+
+		requestAnimationFrame(animate);
+
+		analyser.getByteTimeDomainData(analyserData);
+
+		// the drawing function wants -1..1 values but the 
+		// analyser data is a bunch of 0..255 so we need to 
+		// map them to -1..1
+		for(var i = 0; i < analyserData.length; i++) {
+			osciData[i] = analyserData[i] / 128 - 1;
+		}
+		drawSample(osciCanvas, osciData);
 
 	}
 
