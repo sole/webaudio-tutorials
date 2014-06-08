@@ -6,9 +6,16 @@
 	var waveCanvas = document.getElementById('waveCanvas');
 	var waveCanvasContext = waveCanvas.getContext('2d');
 
+	var osciCanvas = document.getElementById('oscilloscopeCanvas');
+	var osciCanvasContext = osciCanvas.getContext('2d');
+
+
 	// audio setup
 	var audioContext = new AudioContext();
+	var finalGain = audioContext.createGain();
     var bufferSource;
+
+	finalGain.connect(audioContext.destination);
 
 	// events
 	window.addEventListener('dragover', cancel);
@@ -105,10 +112,10 @@
 	function useSample(buffer) {
 
 		if(bufferSource) {
-			bufferSource.disconnect(audioContext.destination);
+			bufferSource.disconnect(finalGain);
 		}
 		bufferSource = audioContext.createBufferSource();
-		bufferSource.connect(audioContext.destination);
+		bufferSource.connect(finalGain);
 		bufferSource.loop = true;
 		bufferSource.buffer = buffer;
 		bufferSource.start(0);
